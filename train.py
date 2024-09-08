@@ -11,13 +11,16 @@ from model import create_model
 
 def train():
     log_dir = './log' #训练日志路劲
-    train_dataset_path=r"../input/facial-expression-dataset-image-folders-fer2013/data/train" #分类训练数据集路径
-    val_dataset_path = r'../input/facial-expression-dataset-image-folders-fer2013/data/val'
-    test_dataset_path=r"../input/facial-expression-dataset-image-folders-fer2013/data/test" #分类测试集路径
-    batch_size = 128
+    X_train = np.load('/kaggle/input/your-dataset/X_train.npy')  # Replace with your actual path
+    y_train = np.load('/kaggle/input/your-dataset/y_train.npy')  # Replace with your actual path
+    X_val = np.load('/kaggle/input/your-dataset/X_val.npy')      # Replace with your actual path
+    y_val = np.load('/kaggle/input/your-dataset/y_val.npy')      # Replace with your actual path
+    # X_test = np.load('/kaggle/input/your-dataset/X_test.npy')    # Replace with your actual path
+   
+    batch_size = 8
     # 加载数据集
     lr = 1e-3
-    epochs = 720
+    epochs = 200
     num_classes=7 #你的分类数
     train_datagen = ImageDataGenerator( #数据集增强，这些参数查阅keras 官方文档 我前面的博客VGG 中 说明过也有介绍说
         rescale=1 / 255.0,
@@ -26,8 +29,9 @@ def train():
         horizontal_flip = True
        )
 
-    train_generator = train_datagen.flow_from_directory(
-        directory=train_dataset_path,
+    train_generator = train_datagen.flow(
+        X_train,
+        y_train,
         target_size=(48, 48),
         color_mode="grayscale",
         batch_size=batch_size,
@@ -38,9 +42,9 @@ def train():
     test_datagen = ImageDataGenerator(
         rescale=1 / 255.0,)
         
-    valid_generator = test_datagen.flow_from_directory(
-        
-        directory=val_dataset_path,
+    valid_generator = test_datagen.flow(
+        X_val,
+        y_val,
         target_size=(48, 48),
         color_mode="grayscale",
         class_mode="categorical",
@@ -48,15 +52,15 @@ def train():
         shuffle=True,
         seed=42
     )
-    test_gen = test_datagen.flow_from_directory(
-        directory=test_dataset_path,
-        target_size=(48, 48),
-        color_mode="grayscale",
-        class_mode="categorical",
-        batch_size=batch_size,
-        shuffle=True,
-        seed=42
-    )
+    # test_gen = test_datagen.flow_from_directory(
+    #     directory=test_dataset_path,
+    #     target_size=(48, 48),
+    #     color_mode="grayscale",
+    #     class_mode="categorical",
+    #     batch_size=batch_size,
+    #     shuffle=True,
+    #     seed=42
+    # )
     #你的模型，模型参数自己调试
     model = create_model(num_classes=num_classes)
 
