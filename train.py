@@ -30,8 +30,7 @@ def train():
        )
 
     train_generator = train_datagen.flow(
-        X_train,
-        y_train,
+        X_train, y_train,
         target_size=(48, 48),
         color_mode="grayscale",
         batch_size=batch_size,
@@ -43,8 +42,7 @@ def train():
         rescale=1 / 255.0,)
         
     valid_generator = test_datagen.flow(
-        X_val,
-        y_val,
+        X_val, y_val,
         target_size=(48, 48),
         color_mode="grayscale",
         class_mode="categorical",
