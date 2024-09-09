@@ -7,7 +7,7 @@ import os
 from tensorflow.keras.callbacks import (EarlyStopping, ReduceLROnPlateau,
                                         TensorBoard)
 from tensorflow.keras.optimizers import Adam
-from model import create_model
+from model import build_net
 import numpy as np
 def train():
     log_dir = '/kaggle/working/logs' #训练日志路劲
