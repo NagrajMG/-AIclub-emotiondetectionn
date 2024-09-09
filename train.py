@@ -10,7 +10,7 @@ from tensorflow.keras.optimizers import Adam
 from model import create_model
 import numpy as np
 def train():
-    log_dir = './log' #训练日志路劲
+    log_dir = '/kaggle/working/logs' #训练日志路劲
     X_train = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_train.npy')  # Replace with your actual path
     y_train = np.load('/kaggle/input/numpy-array-of-images-and-labels/y_train.npy')  # Replace with your actual path
     X_val = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_val.npy')      # Replace with your actual path
@@ -64,9 +64,9 @@ def train():
     model = create_model(num_classes=num_classes)
 
     model.summary()
-    training_weights='./weights'  #这里是保存每次训练权重的  如果需要自己取消注释
+    training_weights='/kaggle/working/weights'  #这里是保存每次训练权重的  如果需要自己取消注释
     checkpoint_period = ModelCheckpoint(training_weights + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
-                                        monitor='val_loss', save_weights_only=True, save_best_only=False, period=1)
+                                        monitor='val_loss', save_weights_only=True, save_best_only=False, save_freq='epoch', verbose = 1)
     #reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=4, verbose=1) #学习率衰减
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=1) # val_loss 不下降时 停止训练 防止过拟合
     tensorboard = TensorBoard(log_dir=log_dir)  #训练日志
@@ -77,6 +77,6 @@ def train():
                        )
     predictions = model.predict(test_gen)
     np.save('/kaggle/working/predictions.npy', predictions)
-    model.save('./model.h5')
+    model.save('/kaggle/working/model.h5')
 if __name__ == '__main__':
     train()
