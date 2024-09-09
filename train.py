@@ -64,8 +64,10 @@ def train():
     model = create_model(num_classes=num_classes)
 
     model.summary()
-    training_weights='/kaggle/working/weights'  #这里是保存每次训练权重的  如果需要自己取消注释
-    checkpoint_period = ModelCheckpoint(training_weights + 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5',
+    training_weights='/kaggle/working/weights'
+    if not os.path.exists(training_weights):
+        os.makedirs(training_weights)#这里是保存每次训练权重的  如果需要自己取消注释
+    checkpoint_period = ModelCheckpoint(filepath=os.path.join(training_weights, 'ep{epoch:03d}-loss{loss:.3f}-val_loss{val_loss:.3f}.h5'),
                                         monitor='val_loss', save_weights_only=True, save_best_only=False, save_freq='epoch', verbose = 1)
     #reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=4, verbose=1) #学习率衰减
     early_stopping = EarlyStopping(monitor='val_loss', min_delta=0, patience=10, verbose=1) # val_loss 不下降时 停止训练 防止过拟合
