@@ -8,7 +8,7 @@ from tensorflow.keras.callbacks import (EarlyStopping, ReduceLROnPlateau,
                                         TensorBoard)
 from tensorflow.keras.optimizers import Adam
 from model import create_model
-
+import numpy as np
 def train():
     log_dir = './log' #训练日志路劲
     X_train = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_train.npy')  # Replace with your actual path
