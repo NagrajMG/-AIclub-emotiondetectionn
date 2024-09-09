@@ -16,7 +16,9 @@ def train():
     X_val = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_val.npy')      # Replace with your actual path
     y_val = np.load('/kaggle/input/numpy-array-of-images-and-labels/y_val.npy')      # Replace with your actual path
     X_test = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_test.npy')    # Replace with your actual path
-   
+    X_train = X_train.reshape((X_train.shape[0], 48, 48, 1))
+    X_val = X_val.reshape((X_val.shape[0], 48, 48, 1))
+    X_test = X_test.reshape((X_test.shape[0], 48, 48, 1))
     batch_size = 25
     # 加载数据集
     lr = 1e-3
