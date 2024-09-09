@@ -21,8 +21,8 @@ def train():
     X_test = X_test.reshape((X_test.shape[0], 48, 48, 1))
     batch_size = 50
     # 加载数据集
-    lr = 1e-4
-    epochs = 200
+    lr = 1e-3
+    epochs = 40
     num_classes=7 #你的分类数
     train_datagen = ImageDataGenerator( #数据集增强，这些参数查阅keras 官方文档 我前面的博客VGG 中 说明过也有介绍说
         # rescale=1 / 255.0,
