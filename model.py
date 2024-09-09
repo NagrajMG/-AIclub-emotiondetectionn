@@ -3,6 +3,10 @@
 #-----------------------------------
 from tensorflow.keras.layers import Conv2D,Flatten,MaxPooling2D,Input,BatchNormalization,Dropout,Dense
 from tensorflow.keras.models import Model
+from tensorflow.keras import optimizers
+from tensorflow.keras.models import Model, Sequential
+from tensorflow.keras.layers import Flatten, Dense, Conv2D, GlobalAveragePooling2D, MaxPooling2D
+from tensorflow.keras.layers import Dropout, BatchNormalization, Activation
 def build_net(img_width, img_height, img_depth, num_classes):
    
     net = Sequential(name='DCNN')
