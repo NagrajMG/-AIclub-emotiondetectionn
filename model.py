@@ -59,11 +59,10 @@ def build_net(img_width, img_height, img_depth, num_classes):
     )
 
     # Compile the model with a different optimizer
-    optimizer = Adam(learning_rate=0.001)  # Adjusted learning rate
-    net.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    
     
     return net
 
 if __name__ == '__main__':
-    model = build_weight_tuned_net(48, 48, 1, 7)
+    model = build_net(48, 48, 1, 7)
     model.summary()
