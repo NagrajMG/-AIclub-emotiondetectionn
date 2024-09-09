@@ -11,11 +11,11 @@ from model import create_model
 
 def train():
     log_dir = './log' #训练日志路劲
-    X_train = np.load('/kaggle/input/your-dataset/X_train.npy')  # Replace with your actual path
-    y_train = np.load('/kaggle/input/your-dataset/y_train.npy')  # Replace with your actual path
-    X_val = np.load('/kaggle/input/your-dataset/X_val.npy')      # Replace with your actual path
-    y_val = np.load('/kaggle/input/your-dataset/y_val.npy')      # Replace with your actual path
-    # X_test = np.load('/kaggle/input/your-dataset/X_test.npy')    # Replace with your actual path
+    X_train = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_train.npy')  # Replace with your actual path
+    y_train = np.load('/kaggle/input/numpy-array-of-images-and-labels/y_train.npy')  # Replace with your actual path
+    X_val = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_val.npy')      # Replace with your actual path
+    y_val = np.load('/kaggle/input/numpy-array-of-images-and-labels/y_val.npy')      # Replace with your actual path
+    X_test = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_test.npy')    # Replace with your actual path
    
     batch_size = 8
     # 加载数据集
@@ -39,7 +39,7 @@ def train():
         seed=42
     )
     test_datagen = ImageDataGenerator(
-        rescale=1 / 255.0,)
+        rescale=1 / 255.0)
         
     valid_generator = test_datagen.flow(
         X_val, y_val,
@@ -50,15 +50,14 @@ def train():
         shuffle=True,
         seed=42
     )
-    # test_gen = test_datagen.flow_from_directory(
-    #     directory=test_dataset_path,
-    #     target_size=(48, 48),
-    #     color_mode="grayscale",
-    #     class_mode="categorical",
-    #     batch_size=batch_size,
-    #     shuffle=True,
-    #     seed=42
-    # )
+    test_gen = test_datagen.flow(
+        X_test,
+        target_size=(48, 48),
+        color_mode="grayscale",
+        batch_size=batch_size,
+        shuffle=False,
+        seed=42
+    )
     #你的模型，模型参数自己调试
     model = create_model(num_classes=num_classes)
 
@@ -74,7 +73,8 @@ def train():
     model.fit(train_generator,validation_data=valid_generator,
                        epochs=epochs,callbacks=[tensorboard, early_stopping,checkpoint_period]
                        )
-    model.evaluate(test_gen,verbose=1)
+    predictions = model.predict(test_gen)
+    np.save('/kaggle/working/predictions.npy', predictions)
     model.save('./model.h5')
 if __name__ == '__main__':
     train()
