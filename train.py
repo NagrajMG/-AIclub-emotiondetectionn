@@ -33,7 +33,7 @@ def train():
 
     train_generator = train_datagen.flow(
         X_train, y_train,
-        target_size=(48, 48),
+        # target_size=(48, 48),
         color_mode="grayscale",
         batch_size=batch_size,
         class_mode="categorical",
@@ -45,16 +45,16 @@ def train():
         
     valid_generator = test_datagen.flow(
         X_val, y_val,
-        target_size=(48, 48),
+        # target_size=(48, 48),
         color_mode="grayscale",
         class_mode="categorical",
         batch_size=batch_size,
-        shuffle=True,
+        shuffle=False,
         seed=42
     )
     test_gen = test_datagen.flow(
         X_test,
-        target_size=(48, 48),
+        # target_size=(48, 48),
         color_mode="grayscale",
         batch_size=batch_size,
         shuffle=False,
