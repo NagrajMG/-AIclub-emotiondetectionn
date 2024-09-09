@@ -23,7 +23,7 @@ def train():
     epochs = 200
     num_classes=7 #你的分类数
     train_datagen = ImageDataGenerator( #数据集增强，这些参数查阅keras 官方文档 我前面的博客VGG 中 说明过也有介绍说
-        rescale=1 / 255.0,
+        # rescale=1 / 255.0,
         rotation_range = 10,
         zoom_range = 0.1,
         horizontal_flip = True
