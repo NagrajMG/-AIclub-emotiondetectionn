@@ -61,7 +61,7 @@ def train():
         seed=42
     )
     #你的模型，模型参数自己调试
-    model = create_model(num_classes=num_classes)
+    model = build_net(48,48,1,7)
 
     model.summary()
     training_weights='/kaggle/working/weights'
