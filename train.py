@@ -17,7 +17,7 @@ def train():
     y_val = np.load('/kaggle/input/numpy-array-of-images-and-labels/y_val.npy')      # Replace with your actual path
     X_test = np.load('/kaggle/input/numpy-array-of-images-and-labels/X_test.npy')    # Replace with your actual path
    
-    batch_size = 8
+    batch_size = 25
     # 加载数据集
     lr = 1e-3
     epochs = 200
