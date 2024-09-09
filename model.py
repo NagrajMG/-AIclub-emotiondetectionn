@@ -1,109 +1,55 @@
-#-----------------------------------
-# 论文提供的原版网络结构
-#-----------------------------------
-from tensorflow.keras.layers import Conv2D,Flatten,MaxPooling2D,Input,BatchNormalization,Dropout,Dense
-from tensorflow.keras.models import Model
-from tensorflow.keras import optimizers
-from tensorflow.keras.models import Model, Sequential
-from tensorflow.keras.layers import Flatten, Dense, Conv2D, GlobalAveragePooling2D, MaxPooling2D
-from tensorflow.keras.layers import Dropout, BatchNormalization, Activation
-def build_net(img_width, img_height, img_depth, num_classes):
-   
-    net = Sequential(name='DCNN')
+from tensorflow.keras.layers import Conv2D, Flatten, MaxPooling2D, Dropout, Dense, BatchNormalization, LeakyReLU
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam
 
+def build_net(img_width, img_height, img_depth, num_classes):
+    net = Sequential(name='Tuned_CNN')
+
+    # First Convolutional Block
     net.add(
         Conv2D(
-            filters=64,
-            kernel_size=(5,5),
+            filters=32,
+            kernel_size=(3, 3),
             input_shape=(img_width, img_height, img_depth),
-            activation='elu',
+            kernel_initializer='glorot_uniform',  # Using Xavier initializer
             padding='same',
-            kernel_initializer='he_normal',
             name='conv2d_1'
         )
     )
     net.add(BatchNormalization(name='batchnorm_1'))
+    net.add(LeakyReLU(alpha=0.1, name='leakyrelu_1'))  # Using LeakyReLU activation
+    net.add(MaxPooling2D(pool_size=(2, 2), name='maxpool2d_1'))
+    net.add(Dropout(0.3, name='dropout_1'))  # Adjusted dropout rate
+
+    # Second Convolutional Block
     net.add(
         Conv2D(
             filters=64,
-            kernel_size=(5,5),
-            activation='elu',
+            kernel_size=(3, 3),
+            kernel_initializer='lecun_normal',  # Different initializer
             padding='same',
-            kernel_initializer='he_normal',
             name='conv2d_2'
         )
     )
     net.add(BatchNormalization(name='batchnorm_2'))
-    
-    net.add(MaxPooling2D(pool_size=(2,2), name='maxpool2d_1'))
-    net.add(Dropout(0.4, name='dropout_1'))
-
-    net.add(
-        Conv2D(
-            filters=128,
-            kernel_size=(3,3),
-            activation='elu',
-            padding='same',
-            kernel_initializer='he_normal',
-            name='conv2d_3'
-        )
-    )
-    net.add(BatchNormalization(name='batchnorm_3'))
-    net.add(
-        Conv2D(
-            filters=128,
-            kernel_size=(3,3),
-            activation='elu',
-            padding='same',
-            kernel_initializer='he_normal',
-            name='conv2d_4'
-        )
-    )
-    net.add(BatchNormalization(name='batchnorm_4'))
-    
-    net.add(MaxPooling2D(pool_size=(2,2), name='maxpool2d_2'))
+    net.add(LeakyReLU(alpha=0.1, name='leakyrelu_2'))
+    net.add(MaxPooling2D(pool_size=(2, 2), name='maxpool2d_2'))
     net.add(Dropout(0.4, name='dropout_2'))
 
-    net.add(
-        Conv2D(
-            filters=256,
-            kernel_size=(3,3),
-            activation='elu',
-            padding='same',
-            kernel_initializer='he_normal',
-            name='conv2d_5'
-        )
-    )
-    net.add(BatchNormalization(name='batchnorm_5'))
-    net.add(
-        Conv2D(
-            filters=256,
-            kernel_size=(3,3),
-            activation='elu',
-            padding='same',
-            kernel_initializer='he_normal',
-            name='conv2d_6'
-        )
-    )
-    net.add(BatchNormalization(name='batchnorm_6'))
-    
-    net.add(MaxPooling2D(pool_size=(2,2), name='maxpool2d_3'))
-    net.add(Dropout(0.5, name='dropout_3'))
-
+    # Flatten and Fully Connected Layer
     net.add(Flatten(name='flatten'))
-        
     net.add(
         Dense(
-            128,
-            activation='elu',
-            kernel_initializer='he_normal',
+            64,
+            kernel_initializer='he_normal',  # Retaining He initializer for dense layers
             name='dense_1'
         )
     )
-    net.add(BatchNormalization(name='batchnorm_7'))
-    
-    net.add(Dropout(0.6, name='dropout_4'))
-    
+    net.add(BatchNormalization(name='batchnorm_3'))
+    net.add(LeakyReLU(alpha=0.1, name='leakyrelu_3'))
+    net.add(Dropout(0.5, name='dropout_3'))
+
+    # Output Layer
     net.add(
         Dense(
             num_classes,
@@ -111,13 +57,13 @@ def build_net(img_width, img_height, img_depth, num_classes):
             name='out_layer'
         )
     )
+
+    # Compile the model with a different optimizer
+    optimizer = Adam(learning_rate=0.001)  # Adjusted learning rate
+    net.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
+    
     return net
 
-if __name__=='__main__':
-    model = build_net(48,48,1,7)
+if __name__ == '__main__':
+    model = build_weight_tuned_net(48, 48, 1, 7)
     model.summary()
-
-
-
-
-
