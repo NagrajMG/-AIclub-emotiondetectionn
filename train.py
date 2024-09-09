@@ -36,7 +36,7 @@ def train():
         # target_size=(48, 48),
         # color_mode="grayscale",
         batch_size=batch_size,
-        class_mode="categorical",
+        # class_mode="categorical",
         shuffle=True,
         seed=42
     )
@@ -47,7 +47,7 @@ def train():
         X_val, y_val,
         # target_size=(48, 48),
         # color_mode="grayscale",
-        class_mode="categorical",
+        # class_mode="categorical",
         batch_size=batch_size,
         shuffle=False,
         seed=42
